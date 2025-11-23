@@ -1,0 +1,308 @@
+\documentclass[a4paper]{article}
+\usepackage{polski} % w³¹cza polonizacjê
+\usepackage{a4wide} % zwiêksza szerokoœæ tekstu
+\usepackage[cp1250]{inputenc} % obs³uga polskich liter
+\usepackage[a4paper, left=2.5cm, right=2.5cm, top=3.5cm,
+bottom=3.5cm, headsep=1.2cm]{geometry}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{graphicx}
+\usepackage{subfigure}
+\usepackage{makeidx}
+\usepackage{hyperref}
+\usepackage{movie15}
+\usepackage{hyperref}
+\usepackage{tabularx}
+\makeindex
+
+\author{ {\Large{\bf{Autor:}}  Wiktoria Cwa³a}}
+\title{\texttt{\bf{\Huge{Analiza danych klubu FC Barcelona w sezonie 21/22}}}}
+\date{\today}
+\linespread{1.5} %interlinia
+
+
+\begin{document}
+\maketitle
+\begin{figure}[h!]
+\centering
+\includegraphics[scale=1, width=10cm]{fcb.jpeg}
+\label{rys}
+\end{figure}
+
+\newpage
+\section{Wprowadzenie}
+Celem niniejszego projektu jest proste przeanalizowanie danych meczowych klubu pi³karskiego FC Barcelona w sezonie 21/22. Dane pochodz¹ z platformy Kaggle \url{https://www.kaggle.com/datasets/yashsrivastava51213/barcelona2021-2022}.
+
+\section{Instalacja bibliotek i wyœwietlenie danych}
+Aby zacz¹æ kodowanie na pocz¹tku zaimportujemy potrzebne biblioteki: 
+\begin{center}
+\begin{tabular}{|l|}
+\hline
+import os
+import pandas as pd\\
+import numpy as np\\
+import matplotlib.pyplot as plt\\
+import seaborn as sns \\
+\hline
+\end{tabular}
+\end{center}
+
+Pobieramy dane i je wyœwietlamy, w tym celu pos³u¿ymy siê nastêpuj¹c¹ komend¹:
+
+\begin{center}
+\begin{tabular}{|l|}
+\hline
+df = pd.read\_csv("/kaggle/input/barcelona2021-2022/match\_report\_2021-22.csv")\\
+df \\
+
+\hline
+\end{tabular}
+\end{center}
+
+W rezultacie otrzymujemy tabelê danych (pozosta³a czêœæ kolumn i wierszy nie wyœwietla siê, gdy¿ ca³a tabela zawiera du¿o danych, które nie mieszcz¹ siê na zdjêciu):
+
+\begin{figure}[h!]
+\centering
+\includegraphics[scale=2, width=14cm]{dane.png}
+\label{rys}
+\end{figure}
+
+Je¿eli tabela zawiera bardzo du¿o wierszy, dla u³atwienia mo¿emy wyœwietliæ tylko kilka pierwszych wierszy wykorzystuj¹c nastêpuj¹c¹ komendê:
+
+\begin{center}
+\begin{tabular}{|l|}
+\hline
+df.head()\\
+\hline
+\end{tabular}
+\end{center}
+
+\newpage
+
+\section{Informacje o danych}
+Mo¿emy bli¿ej przyjrzeæ siê naszej tabelce danych. Na pocz¹tek, mo¿emy uzyskaæ informacje ile wierszy oraz kolumn zawiera nasza tabela danych. Wykorzystujemy do tego poni¿sz¹ komendê:
+
+
+\begin{center}
+\begin{tabular}{|l|}
+\hline
+print(df.shape)\\
+\hline
+\end{tabular}
+\end{center}
+
+W rezultacie otrzymujemy informacje, ¿e nasza tabela zawiera $54$ wiersze i $19$ kolumn, co wyœwietla siê w nastêpuj¹cej formie:
+
+$$(54,19)$$
+
+
+Przy u¿yciu komendy $\textbf{df.info()}$ otrzymujemy dok³adne informacje, takie jak nazwy wszystkich kolumn, iloœæ niepustych wartoœci oraz typ danych zawartych w danej kolumnie.
+
+\begin{figure}[h!]
+\centering
+\includegraphics[scale=0.5, width=6cm]{info.png}
+\label{rys}
+\end{figure}
+
+
+\section{Czyszczenie i analiza danych}
+Nastêpnie, przechodzimy do czyszczenia danych. Przy pomocy komendy $\textbf{df.dropna()}$ usuwamy wiersze lub kolumny zawieraj¹ce brakuj¹ce wartoœci. W rezultacie nasza tabela danych zawiera ju¿ tylko 6 wierszy i prezentuje siê nastêpuj¹co: 
+
+
+\begin{figure}[h!]
+\centering
+\includegraphics[scale=1.5, width=14cm]{czyste.png}
+\label{rys}
+\end{figure}
+
+Specjalnie dane zosta³y tak dobrane (i by³y wystarczaj¹co ma³e), by mo¿na by³o naocznie sprawdziæ wyniki naszej analizy. Na pocz¹tek mo¿emy sprawdziæ bilans wygranych, remisów i przegranych. W tym celu u¿yjemy komendy:
+
+\begin{center}
+\begin{tabular}{|l|}
+\hline
+df['Result'].value\_counts()\\
+\hline
+\end{tabular}
+\end{center}
+
+W rezultacie otrzymujemy:
+
+
+\begin{figure}[h!]
+\centering
+\includegraphics[scale=1, width=4cm]{ile.png}
+\label{rys}
+\end{figure}
+
+
+Mo¿emy wyœwietliæ powy¿szy bilans na wykresie. U¿ywaj¹c poni¿szej komendy w rezultacie otrzymujemy wykres s³upkowy obrazuj¹cy iloœæ wygranych, przegranych oraz remisów klubu FC Barcelona w sezonie 21/22:
+
+
+
+\begin{center}
+\begin{tabular}{|l|}
+\hline
+df['Result'].value\_counts().plot(kind='bar', color='blue')\\
+plt.title("Bilans FCB 21/22")\\
+plt.xlabel("Wynik")\\
+plt.ylabel("Liczba meczow") \\
+plt.show()\\
+\hline
+\end{tabular}
+\end{center}
+
+
+Wówczas wykres prezentuje siê nastêpuj¹co:
+
+\begin{figure}[h!]
+\centering
+\includegraphics[scale=1, width=10cm]{wykres.png}
+\label{rys}
+\end{figure}
+ 
+\newpage
+Mo¿emy tak¿e posortowaæ nasze dane. Przypuœcmy, ¿e chcemy posortowaæ nasze dane wed³ug frekwencji na stadionie (od najmniejszej do najwiêkszej). Skupiamy siê zatem na kolumnie $\textbf{Attendance}$. Wykorzystujemy komendê 
+\begin{center}
+\begin{tabular}{|l|}
+\hline
+df.sort\_values(by = "Attendance", ascending = True).head()\\
+
+\hline
+\end{tabular}
+\end{center}
+W rezultacie otrzymujemy poni¿sz¹ tabelê posortowan¹ wzglêdem frekwencji na meczu:
+
+\begin{figure}[h!]
+\centering
+\includegraphics[scale=2, width=14cm]{frek.png}
+\label{rys}
+\end{figure}
+
+
+\section{Zamiana danych}
+
+Wczeœniej z naszych danych usuniête zosta³y wszystkie kolumny i wiersze zawieraj¹ce puste pola. W konsekwencji czego pozosta³o tylko 6 wierszy, które mogliœmy analizowaæ. Teraz, w puste pola niezawieraj¹ce ¿adnych danych wstawimy pewne wartoœci. Zauwa¿my, ¿e kolumna $\textbf{"Notes"}$ w wiêkszoœci miejsc ma pola wype³nione symbolem $\textbf{NaN}$. To s¹ w³aœnie te braki w danych, które teraz uzue³nimy. W te miejsca wpiszemy wartoœæ $\textbf{"Empty"}.$
+\newline
+Wczytajmy ponownie nasze dane. 
+\begin{center}
+\begin{tabular}{|l|}
+\hline
+data = pd.read\_csv("/kaggle/input/barcelona2021-2022/match\_report\_2021-22.csv")\\
+data\\ 
+\hline
+\end{tabular}
+\end{center}
+Dalej, wykonujemy wczeœniej opisan¹ procedurê: 
+
+\begin{center}
+\begin{tabular}{|l|}
+\hline
+values = {"Notes": 'Empty'}\\
+data = data.fillna(value=values) \\
+data\\
+\hline
+\end{tabular}
+\end{center}
+
+\newpage
+Jak mo¿emy zauwa¿yæ na poni¿szym obrazku, w kolumnie $\textbf{"Notes"}$ puste wartoœci zosta³y wype³nione wartoœci¹ $\textbf{"Empty"}.$
+
+\begin{figure}[h!]
+\centering
+\includegraphics[scale=2, width=14cm]{d.png}
+\label{rys}
+\end{figure}
+
+\section{Analiza danych - ci¹g dalszy}
+Mo¿emy przeanalizowaæ, ile meczów sêdziowa³ ka¿dy sêdzia. Na pocz¹tek wyœwietlimy imiona i nazwiska wszystkich sêdziów, którzy sêdziowali co najmniej jeden mecz w sezonie 21/22. 
+
+
+\begin{center}
+\begin{tabular}{|l|}
+\hline
+data['Referee'].unique()\\
+\hline
+\end{tabular}
+\end{center}
+Rezultat mo¿emy zaobserwowaæ w poni¿szej grafice:
+
+\begin{figure}[h!]
+\centering
+\includegraphics[scale=2, width=14cm]{sedzia.png}
+\label{rys}
+\end{figure}
+
+\newpage
+W celu przeanalizowania iloœci sêdziowanych meczów przez ka¿dego sêdziego, u¿yjemy w tym celu polecenia:
+
+\begin{center}
+\begin{tabular}{|l|}
+\hline
+ref = data['Referee'].value\_counts()\\
+print(ref)\\
+\hline
+\end{tabular}
+\end{center}
+
+W rezultacie otrzymujemy nastêpuj¹cy wynik:
+
+\begin{figure}[h!]
+\centering
+\includegraphics[scale=0.5, width=5cm]{ref.png}
+\label{rys}
+\end{figure}
+
+Uwzglêdnijmy powy¿sze rezultaty na wykresie. Wykonuj¹c poni¿sz¹ komendê mamy:
+
+\begin{center}
+\begin{tabular}{|l|}
+\hline
+ref=data['Referee'].value\_counts()\\
+plt.barh(ref.index, ref.values)\\
+plt.xlabel("Liczba prowadzonych meczów")\\
+plt.ylabel("Sêdzia")\\
+plt.title("Wykres przedstawiaj¹cy liczbê prowadzonych meczów przez danego sêdziego")\\
+plt.show()\\
+\hline
+\end{tabular}
+\end{center}
+
+
+\newpage
+Wówczas wykres prezentuje siê nastêpuj¹co:
+\begin{figure}[h!]
+\centering
+\includegraphics[scale=1, width=12cm]{wyk.png}
+\label{rys}
+\end{figure}
+
+Mo¿emy tak¿e sprawdziæ, który z zawodników Barcelony najczêœciej pe³ni³ rolê kapitana. Uzyskamy to przy uruchomieniu nastêpuj¹cej komendy:
+
+\begin{center}
+\begin{tabular}{|l|}
+\hline
+captain = data['Captain'].value_counts()\\
+print(captain)\\
+\hline
+\end{tabular}
+\end{center}
+
+Widzimy, ¿e najczêœciej kapitanem dru¿yny by³ Sergio Busquets:
+
+\begin{figure}[h!]
+\centering
+\includegraphics[scale=2, width=8cm]{capt.png}
+\label{rys}
+\end{figure}
+
+Z ciekawoœci, sprawdŸmy ile meczy pi³karze rozegrali u siebie, a ile na wyjeŸdzie. Informacje na temat miejsca rozgrywania meczu zawiera kolumna $\textbf{'Venue'}.$ Przy u¿yciu komendy $\textbf{ data['Venue'].value\_counts()}$ dostajemy informacje meczowe:
+
+\begin{figure}[h!]
+\centering
+\includegraphics[scale=0.5, width=8cm]{venue.png}
+\label{rys}
+\end{figure}
+
+
+\end{document}
